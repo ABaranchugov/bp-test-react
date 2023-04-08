@@ -1,11 +1,49 @@
-.app-input {
-  background: white;
-  border: 1px solid #8c8c8c;
-  color: #282c34;
-  padding: 8px;
-  height: 42px;
+@import "@styles/base.less";
 
-  &__disabled {
-    background: #8c8c8c;
+.field {
+  height: 92px;
+
+  &__input {
+    background: @gray-2;
+    border: 1px solid @gray-2;
+    border-radius: 4px;
+    color: #282c34;
+    height: 42px;
+    padding: 8px;
+    width: 100%;
+
+    &:focus {
+      border-color: @primary-color;
+      box-shadow: 0 0 0 2px @blue-3;
+      outline: @primary-color 1px;
+    }
+
+    &._disabled {
+      background: #8c8c8c;
+    }
+
+    &._invalid:not(._disabled) {
+      & {
+        border-color: @danger-color;
+
+        &:focus {
+          box-shadow: 0 0 0 2px @red-3;
+          outline: @danger-color;
+        }
+      }
+    }
+
+    &-wrapper {
+      position: relative;
+    }
+  }
+
+  &__exclamation {
+    color: @danger-color;
+    line-height: 0;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translate(0, -50%);
   }
 }

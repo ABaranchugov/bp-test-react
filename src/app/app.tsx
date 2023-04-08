@@ -1,10 +1,11 @@
 import React, {FC, ReactElement, Suspense} from 'react';
 import {withAdaptive} from 'react-adaptive';
-import "./App.less";
-import {Router} from './app/router/router';
+import {Router} from './router/router';
 import {IAppGlobalState} from './app.model';
 import {IConfig} from 'core/model/config.model';
 import {createGlobalState} from 'react-hooks-global-state';
+import classes from './classes.module.less'
+import {debounce} from 'throttle-debounce';
 
 const config: IConfig = (process.env.config as unknown as IConfig) || [];
 
@@ -13,6 +14,11 @@ const {useGlobalState, setGlobalState} = createGlobalState<IAppGlobalState>({
   config
 });
 
+const setIsMobile = debounce(
+  0,
+  (size: any) => setGlobalState('isMobile', size.width <= 992)
+);
+
 const App: FC = (): ReactElement => {
   return <Suspense fallback={<div>Loading...</div>}>
     <Router></Router>
@@ -20,12 +26,10 @@ const App: FC = (): ReactElement => {
 }
 
 const AdaptiveAppComponent = (size: any) => (props: {}) => {
-  if (size.width !== 0) {
-    setGlobalState('isMobile', size.width <= 992);
-  }
+  setIsMobile(size)
 
   return <App></App>;
 }
 
-export default withAdaptive({mapSizeToComponent: AdaptiveAppComponent, wrapperClassName: 'App'});
+export default withAdaptive({mapSizeToComponent: AdaptiveAppComponent, wrapperClassName: classes.app});
 export {useGlobalState as useAppGlobalState};

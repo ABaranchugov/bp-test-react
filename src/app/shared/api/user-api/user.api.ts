@@ -1,5 +1,5 @@
 import {useConfig} from 'core/hooks/use-config';
-import {ICheckUserData, IUserApi} from 'core/api/user-api/user-api.model';
+import {ICheckUserData, IUserApi} from './user-api.model';
 import {useApi} from 'core/hooks/use-api/use-api';
 import {AxiosInstance} from 'axios';
 import {useRef} from 'react';

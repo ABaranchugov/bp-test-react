@@ -1,0 +1,48 @@
+@import "@styles/base.less";
+
+.login-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  height: 100%;
+  width: 100%;
+
+  &__left {
+    background: @blue-6;
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 50%;
+  }
+
+  &__right {
+    height: 100%;
+    padding: 50px 20px 24px ;
+    width: 50%;
+
+    &-footer{
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .login-form {
+    flex-direction: column;
+
+    &__left {
+      height: 200px;
+      width: 100%;
+    }
+
+    &__right {
+      height: calc(100% - 200px);
+      padding-top: 24px;
+      width: 100%;
+    }
+  }
+}

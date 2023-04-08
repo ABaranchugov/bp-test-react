@@ -1,0 +1,10 @@
+[
+  {
+    "code": "userApiUrl",
+    "value": "/checkUser"
+  },
+  {
+    "code": "serverUrl",
+    "value": "/"
+  }
+]

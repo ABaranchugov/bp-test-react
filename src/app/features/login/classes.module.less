@@ -1,29 +1,62 @@
 @import "@styles/base.less";
 
 .login {
-  height: 100%;
-  position: absolute;
-  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
   z-index: 1000;
 
   &-wrapper {
-
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    z-index: 1;
   }
 
   &-mask {
-    background-color: fade(@black, 10%)
+    background-color: fade(@black, 25%);
+    z-index: 1;
   }
 
-  &__content {
+  &,
+  &-wrapper,
+  &-mask {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+  }
+
+  &__body {
     background: @white;
+    border-radius: 10px;
     height: 364px;
+    overflow: hidden;
+    position: relative;
     width: 750px;
+    z-index: 2;
+
+    &._mobile {
+      height: 529px;
+      width: 200px;
+    }
 
     @media screen and (max-width: 992px) {
       & {
         height: 529px;
-        width: 200px;
+        width: 375px;
       }
     }
+  }
+
+  &__close {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    height: 24px;
+    justify-content: center;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 24px;
   }
 }

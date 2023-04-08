@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "lib": [
       "dom",
       "dom.iterable",
@@ -16,11 +16,29 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ],
+    "paths": {
+      "core/*": [
+        "src/app/core/*"
+      ],
+      "features/*": [
+        "src/app/features/*"
+      ],
+      "@icons/*": [
+        "src/assets/icons/*"
+      ]
+    },
+    "baseUrl": "./"
   },
   "include": [
-    "src"
+    "src",
+    "types"
   ]
 }

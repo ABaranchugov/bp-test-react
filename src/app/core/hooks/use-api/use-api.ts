@@ -2,13 +2,13 @@ import axios, {AxiosInstance, AxiosRequestConfig} from "axios";
 import {useConfig} from 'core/hooks/use-config';
 import {createGlobalState} from 'react-hooks-global-state';
 import {IApiGlobalState} from 'core/hooks/use-api/use-api.model';
-import {GlobalState, State} from 'core/model/state.model';
+import {GlobalState} from 'core/model/state.model';
 
 const {useGlobalState} = createGlobalState<IApiGlobalState>({instance: undefined});
 
 export const useApi = (config?: AxiosRequestConfig): AxiosInstance => {
   let [api, setApi]: GlobalState<IApiGlobalState> = useGlobalState('instance');
-  const baseURL = useConfig<string>('serverUrl');
+  const baseURL: string | null = useConfig<string>('serverUrl');
 
   if (config) {
     return axios.create(config);
