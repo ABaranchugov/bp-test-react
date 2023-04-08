@@ -1,0 +1,29 @@
+@import "@styles/base.less";
+
+.login {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+
+  &-wrapper {
+
+  }
+
+  &-mask {
+    background-color: fade(@black, 10%)
+  }
+
+  &__content {
+    background: @white;
+    height: 364px;
+    width: 750px;
+
+    @media screen and (max-width: 992px) {
+      & {
+        height: 529px;
+        width: 200px;
+      }
+    }
+  }
+}
