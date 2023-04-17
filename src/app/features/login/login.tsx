@@ -27,7 +27,9 @@ export const Login: FC = (): ReactElement => {
   return <div className={classes.login}>
     <div className={classes.loginMask} onClick={handleClose}></div>
     <div className={classes.login__body}>
-      {closeIcon && <Icon {...closeIcon} className={classes.login__close} onClick={handleClose}></Icon>}
+      {closeIcon && <div className={classes.login__close} onClick={handleClose}>
+        <Icon {...closeIcon} className={classes.login__closeIcon} ></Icon>
+      </div>}
       <LoginRouter></LoginRouter>
     </div>
   </div>
