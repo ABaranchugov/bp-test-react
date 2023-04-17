@@ -9,22 +9,23 @@ import {equals} from 'core/utils/common.utils';
 export const Icon: FC<IIconProps> = ({viewBox, type, ...props}: IIconProps): ReactElement => {
   const [icon, setIcon] = useState<string>('');
   const [style, setStyle] = useState<CSSProperties>({});
-  const newStyle: CSSProperties = getIconStyle(props);
-
-  if (!equals(style, newStyle)) {
-    setStyle(newStyle);
-  }
 
   useEffect(() => {
-      type && importIcon(type, setIcon)
-    },
-    [type]
-  );
+    const newStyle: CSSProperties = getIconStyle(props);
 
-  return (<span className={getComponentClassName(ICON_CLASS_MAP, {type}, classes.icon, props.className)}
-                data-title={JSON.stringify(style)}
-                style={style}>
-    {icon && <svg viewBox={viewBox || ICON_VIEW_BOX}
+    if (!equals(style, newStyle)) {
+      setStyle(newStyle);
+    }
+  }, [props]);
+
+  useEffect(() => {
+    type && importIcon(type, setIcon)
+  }, [type]);
+
+  return <span className={getComponentClassName(ICON_CLASS_MAP, {type}, classes.icon, props.className)}>
+    {icon && <svg className={classes.icon__svg}
+                  viewBox={viewBox || ICON_VIEW_BOX}
+                  style={style}
                   focusable="false"
                   fill="currentColor"
                   width="1em"
@@ -33,5 +34,5 @@ export const Icon: FC<IIconProps> = ({viewBox, type, ...props}: IIconProps): Rea
                   data-icon="forward"
                   dangerouslySetInnerHTML={{__html: clearIconSvg(icon)}}>
     </svg>}
-  </span>);
+  </span>;
 }

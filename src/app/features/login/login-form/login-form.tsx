@@ -1,16 +1,9 @@
 import {FC, ReactElement, useEffect, useState} from 'react';
 import {Form} from 'core/components/form/form';
-import {
-  AttemptsKey,
-  FORM_INITIAL_STATE,
-  LOGIN_BUTTON,
-  LOGIN_FORM,
-  USER_ICON
-} from 'features/login/login-form/login-form.constants';
+import {FORM_INITIAL_STATE, LOGIN_BUTTON, LOGIN_FORM, USER_ICON} from 'features/login/login-form/login-form.constants';
 import classes from './classes.module.less';
 import {Icon} from 'core/components/icon/icon';
-import {getDirtySetter, getUserIconSize} from 'features/login/login-form/login-form.utils';
-import {useAppGlobalState} from '../../../app';
+import {getDirtySetter, useIncreaseAttempts} from 'features/login/login-form/login-form.utils';
 import {Button} from 'core/components/button/button';
 import {IFormChangeEvent} from 'core/components/form/form.model';
 import {ICheckUserData, IUserApi} from '../../../shared/api/user-api/user-api.model';
@@ -23,39 +16,32 @@ import {LoginRoutes} from 'features/login/login-router/login-router.constants';
 import {AppRoutes} from '../../../router/router.constants';
 import {AxiosError} from 'axios';
 import {NavigateFunction} from 'react-router/dist/lib/hooks';
-import {GlobalState, State} from 'core/model/state.model';
-import {IAppGlobalState} from '../../../app.model';
-import {useLocalStorage} from 'core/hooks/use-localstorage';
+import {State} from 'core/model/state.model';
 
 export const LoginForm: FC = (): ReactElement => {
   const api: IUserApi = userApi();
   const navigate: NavigateFunction = useNavigate();
-  const [{
-    isValid,
-    value,
-    setError
-  }, formChange]: State<IFormChangeEvent<ICheckUserData>> = useState<IFormChangeEvent<ICheckUserData>>(FORM_INITIAL_STATE);
+  const [{isValid, value, setError}, formChange]: State<IFormChangeEvent<ICheckUserData>>
+    = useState<IFormChangeEvent<ICheckUserData>>(FORM_INITIAL_STATE);
   const checkUserLoading: boolean = mountLoader<IUserApi>(api);
-  const [isMobile]: GlobalState<IAppGlobalState> = useAppGlobalState('isMobile');
   const isDirtyState: State<boolean> = useState<boolean>(false);
   const setIsDirty: (value: Record<string, any>) => void = getDirtySetter(isDirtyState);
-  const [successAttempts, setSuccessAttempts] = useLocalStorage(AttemptsKey.success, 0);
-  const [failedAttempts, setFailedAttempts] = useLocalStorage(AttemptsKey.failed, 0);
+  const increaseAttempts: (success: boolean) => void = useIncreaseAttempts();
 
   const handleChange: Function = (event: IFormChangeEvent) => formChange(event);
 
-  const handleSubmit: Function = () => {
-    api.checkUser(value).then(
-      () => {
-        isDirtyState[1](false);
-        setSuccessAttempts(successAttempts + 1);
-        setTimeout(() => navigate(`${AppRoutes.Login}${LoginRoutes.Success}`));
-      },
-      ({response}: AxiosError) => {
-        setFailedAttempts(failedAttempts + 1);
-        setError('password', {message: String(response?.data || 'Something wrong')});
-      }
-    )
+  const handleSubmit: Function = async () => {
+    try {
+      await api.checkUser(value);
+      isDirtyState[1](false);
+      increaseAttempts(true);
+      setTimeout(() => navigate(`${AppRoutes.Login}${LoginRoutes.Success}`));
+    } catch (error) {
+      const message: string = (error as AxiosError)?.response?.data || 'Something wrong';
+
+      increaseAttempts(false);
+      setError('password', {message});
+    }
   }
 
   useEffect(() => setIsDirty(value), [value]);
@@ -63,7 +49,7 @@ export const LoginForm: FC = (): ReactElement => {
 
   return <div className={classes.loginForm}>
     <div className={classes.loginForm__left}>
-      <Icon {...USER_ICON} size={getUserIconSize(isMobile)}></Icon>
+      <Icon {...USER_ICON} className={classes.loginForm__icon}></Icon>
     </div>
 
     <div className={classes.loginForm__right}>

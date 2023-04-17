@@ -5,7 +5,6 @@ export const CLOSE_ICON_HOVER_COLOR: string ='#83aae6';
 
 export const CLOSE_ICON: IIconProps = {
   type: 'close',
-  size: 14,
-  color: '#5988d9'
+  size: 14
 }
 
